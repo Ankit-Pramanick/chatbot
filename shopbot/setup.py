@@ -1,0 +1,194 @@
+#!/usr/bin/env python3
+"""
+E-commerce Chatbot Setup and Run Script
+This script sets up the necessary directories and runs the Flask application.
+"""
+
+import os
+from pathlib import Path
+
+def create_directory_structure():
+    """Create the necessary directory structure for the Flask app."""
+
+    # Create templates directory
+    templates_dir = Path('templates')
+    templates_dir.mkdir(exist_ok=True)
+
+    # Create static directory for future assets
+    static_dir = Path('static')
+    static_dir.mkdir(exist_ok=True)
+
+    print("✅ Directory structure created successfully!")
+
+    # Create the login.html template
+    login_template = '''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopBot - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .toggle-form {
+            color: #667eea;
+            cursor: pointer;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+
+        .toggle-form:hover {
+            color: #5a6fd8;
+        }
+
+        .error {
+            color: #e74c3c;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .success {
+            color: #27ae60;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <div class="logo">ShopBot</div>
+    <div class="subtitle" id="form-title">Login to your account</div>
+
+    <form id="auth-form" method="POST" action="/login">
+        <div class="form-group">
+            <label for="username">Username or Email</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+
+        <div class="form-group" id="email-group" style="display: none;">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <button type="submit" class="btn" id="submit-btn">Login</button>
+
+        <div class="error" id="error-msg"></div>
+        <div class="success" id="success-msg"></div>
+    </form>
+
+    <div class="toggle-form" onclick="toggleForm()">Don't have an account? Register here</div>
+</div>
+
+<script>
+    let isLogin = true;
+
+    function toggleForm() {
+        isLogin = !isLogin;
+        document.getElementById('form-title').innerText = isLogin ? 'Login to your account' : 'Register a new account';
+        document.getElementById('submit-btn').innerText = isLogin ? 'Login' : 'Register';
+        document.getElementById('auth-form').action = isLogin ? '/login' : '/register';
+        document.querySelector('.toggle-form').innerText = isLogin ? "Don't have an account? Register here" : "Already have an account? Login here";
+        document.getElementById('email-group').style.display = isLogin ? 'none' : 'block';
+    }
+</script>
+
+</body>
+</html>'''
+
+    # Write the HTML file
+    login_path = templates_dir / 'login.html'
+    with open(login_path, 'w', encoding='utf-8') as file:
+        file.write(login_template)
+
+    print("✅ login.html created in /templates directory.")
+
+if __name__ == "__main__":
+    create_directory_structure()
